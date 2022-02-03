@@ -1,4 +1,35 @@
 .app {
   margin: 0 auto;
   max-width: 1000px;
+  padding: 20px;
+
+  &-form {
+    padding: 25px;
+    text-align: center;
+  }
+
+  &-button {
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 3px;
+    background: rgb(64, 199, 129);
+    transition: 0.2s;
+    margin-left: 20px;
+
+    &:hover {
+      background: rgb(33, 147, 90);
+      cursor: pointer;
+    }
+  }
+
+  &-message {
+    padding: 10px;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    width: calc(100% - 200px);
+  }
+
 }

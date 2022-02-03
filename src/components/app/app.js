@@ -1,13 +1,28 @@
 import './app.scss';
-import Message from '../message/message';
+import { useEffect, useState } from 'react';
+import { AUTHORS } from '../../utils/constants';
+import MessageList from '../messegeList/messageList';
+import Form from './../form/form';
 
 function App() {
 
-  const messageText = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, dolorem similique.';
+  const [messageList, setMessageList] = useState([]);
+
+  useEffect(() => {
+    if (messageList[messageList.length - 1]?.author === AUTHORS.AUTHOR_ME) {
+      const botAnswerInterval = setTimeout(() => sendMessage(AUTHORS.AUTHOR_BOT, 'Message from Bot'), 1500);
+      return () => clearTimeout(botAnswerInterval);
+    }
+  }, [messageList]);
+
+  const sendMessage = (author, text) => {
+    setMessageList(messageList => [...messageList, { author: author, text: text }]);
+  };
 
   return (
     <div className='app'>
-      <Message messageText={messageText}/>
+      <MessageList messageList={messageList} />
+      <Form sendMessage={sendMessage} />
     </div>
   );
 }
