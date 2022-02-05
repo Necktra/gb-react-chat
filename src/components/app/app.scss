@@ -2,26 +2,20 @@
   margin: 0 auto;
   max-width: 1000px;
   padding: 20px;
+  display: grid;
+  grid-template-columns: 20% auto 10%;
+
+&-messages-wrapper {
+  margin: 0 30px;
+}
 
   &-form {
     padding: 25px;
     text-align: center;
-  }
+    display: grid;
+    grid-template-columns: 80% 15%;
+    grid-gap: 5%
 
-  &-button {
-    font-weight: 700;
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-    border-radius: 3px;
-    background: rgb(64, 199, 129);
-    transition: 0.2s;
-    margin-left: 20px;
-
-    &:hover {
-      background: rgb(33, 147, 90);
-      cursor: pointer;
-    }
   }
 
   &-message {
