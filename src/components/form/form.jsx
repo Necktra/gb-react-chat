@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { Button, TextField } from '@mui/material';
+import { useRef, useState, useEffect } from 'react';
 import { AUTHORS } from '../../utils/constants';
 
 
 const Form = ({ sendMessage }) => {
 
   const [newMessageText, setNewMessageText] = useState('');
+
+  const messageInput = useRef(null);
+
+  useEffect(() => { messageInput.current.focus() }, []);
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
@@ -13,10 +18,21 @@ const Form = ({ sendMessage }) => {
   };
 
   return (
+
     <form className="app-form" onSubmit={onHandleSubmit}>
-      <input className="app-message" value={newMessageText} onChange={e => setNewMessageText(e.target.value)}></input>
-      <button className="app-button">Send</button>
+
+      <TextField
+        fullWidth
+        inputRef={messageInput}
+        value={newMessageText}
+        onChange={e => setNewMessageText(e.target.value)}
+      />
+      <Button variant="contained" type="submit"> 
+        Send
+      </Button>
+
     </form>
+
   )
 }
 

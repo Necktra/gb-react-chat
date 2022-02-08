@@ -1,11 +1,14 @@
 .message {
 
-    border: 4px solid #663399;
+    border: 4px solid rgb(251, 236, 255);
     border-radius: 10px;
-    background-color: rgb(255, 199, 193);
+    background-color: rgb(251, 236, 255);
+    margin-bottom: 10px;
+    position: relative;
+    max-width: 632px;
 
     &-author {
-        color: royalblue;
+        color: rgb(25, 118, 210);
         font-size: 20px;
         font-weight: bold;
         padding: 0 50px;
@@ -24,7 +27,8 @@
         font-size: 16px;
         font-weight: bold;
         padding: 0 50px;
-
+        max-width: 770px;
+        word-wrap: break-word;
         &__user {
             text-align: left;
         }
@@ -32,5 +36,39 @@
         &__bot {
             text-align: right;
         }
+    }
+}
+
+.message-author__user_bfr {
+    position: relative;
+
+    &::before {
+        content: "";
+        display: block;
+        width: 0;
+        position: absolute;
+        left: -41px;
+        bottom: -4px;
+        border-right: 22px solid rgb(251, 236, 255);
+        border-left: 22px solid transparent;
+        border-top: 20px solid transparent;
+        border-bottom: 0px solid transparent;
+    }
+}
+
+.message-author__bot_aft {
+    position: relative;
+
+    &::after {
+        content: "";
+        display: block;
+        width: 0;
+        position: absolute;
+        bottom: -4px;
+        right: -41px;
+        border-right: 22px solid transparent;
+        border-left: 22px solid rgb(251, 236, 255);
+        border-top: 20px solid transparent;
+        border-bottom: 0px solid transparent;
     }
 }
