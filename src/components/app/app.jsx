@@ -6,40 +6,16 @@ import Form from '../form/form';
 import { v4 as uuidv4 } from 'uuid';
 import ChatList from '../chatList/chatList';
 
-import { createTheme, Button } from '@mui/material';
-import { green, grey, purple } from '@mui/material/colors';
+import { Button } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
+import { lightTheme } from '../../themes/themes';
+import { darkTheme } from './../../themes/themes';
 
 function App() {
 
   const [messageList, setMessageList] = useState([]);
+  const [currentTheme, setCurrentTheme] = useState(lightTheme);
 
-  const [currentTheme, setCurrentTheme] = useState('light');
-  const theme = createTheme({
-    palette: {
-      currentTheme,
-      ...(currentTheme === 'dark'
-        ? {
-            primary: green,
-            divider: green[200],
-            text: {
-              secondary: grey[800],
-            },
-            
-          }
-        : {
-            primary: purple,
-            divider: purple[700],
-            background: {
-              default: purple[900],
-              paper: purple[900],
-            },
-            text: {
-              secondary: grey[500],
-            },
-          }),
-    },
-  });
 
   useEffect(() => {
     if (messageList[messageList.length - 1]?.author === AUTHORS.AUTHOR_ME) {
@@ -53,15 +29,15 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-    <div className='app'>
-      <ChatList />
-      <div className='app-messages-wrapper'>
-        <MessageList messageList={messageList} />
-        <Form sendMessage={sendMessage} />
+    <ThemeProvider theme={currentTheme}>
+      <div className='app'>
+        <ChatList />
+        <div className='app-messages-wrapper'>
+          <MessageList messageList={messageList} />
+          <Form sendMessage={sendMessage} />
+        </div>
+        <Button style={{ width: '60px', height: '60px' }} className='app-change-theme' variant='outlined' size='small' onClick={() => setCurrentTheme(currentTheme === lightTheme ? darkTheme : lightTheme)}>Change theme</Button>
       </div>
-      <Button style={{width: '60px', height: '60px'}} className='app-change-theme' variant='outlined' size='small' onClick={()=>setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}>Change theme</Button>
-    </div>
     </ThemeProvider>
   );
 }
