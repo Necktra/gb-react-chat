@@ -1,8 +1,13 @@
-import { Box, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { Box, List, ListItem, ListItemText } from "@mui/material";
+import { NavLink, Outlet } from "react-router-dom";
+import './chatList.scss';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { Button } from '@mui/material';
 
-const ChatList = (props) => {
+const ChatList = ({ currentTheme }) => {
 
-    const chatList = [
+    const [chatList, setChatList] = useState([
         {
             id: '1',
             name: 'User 1'
@@ -23,27 +28,36 @@ const ChatList = (props) => {
             id: '5',
             name: 'User 5'
         },
-    ];
+    ]);
+
+    const deleteChat = (id) => {
+        setChatList((chatList) => [...chatList.filter(el => el.id !== id)]);
+    };
+
+    const addChat = () => {
+        setChatList((chatList) => [...chatList, { id: uuidv4(), name: 'New user' }]);
+    };
 
     const chatListRender = chatList.map((el) => {
         return (
-        <ListItem disablePadding>
-            <ListItemButton component="a" href={`#${el.id}`}>
-                <ListItemText primary={el.name} />
-            </ListItemButton>
-        </ListItem>)
+            <ListItem disablePadding key={el.id}>
+                <NavLink to={`/chats/${el.id}`} style={({ isActive }) => ({ color: isActive ? currentTheme.palette.primary.main : "black" })}><ListItemText primary={el.name} /></NavLink>
+                <Button size='small' style={{ width: '20px', height: '20px' }} onClick={() => deleteChat(el.id)}>x</Button>
+            </ListItem>)
     });
 
     return (
-
-        <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            <nav aria-label="main mailbox folders">
-                <List>
-                    {chatListRender}
-                </List>
-            </nav>
-        </Box>
-
+        <div className='chat-list-wrapper'>
+            <Box sx={{ width: '100%', maxWidth: 300, bgcolor: 'background.paper' }}>
+                <nav aria-label="main mailbox folders">
+                    <List>
+                        {chatListRender}
+                        <Button style={{ width: '130px', height: '30px' }} onClick={addChat}>Add new chat</Button>
+                    </List>
+                </nav>
+            </Box>
+            <Outlet />
+        </div>
     )
 }
 
