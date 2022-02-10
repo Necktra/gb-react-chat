@@ -1,9 +1,10 @@
 import { Box, List, ListItem, ListItemText } from "@mui/material";
 import { NavLink, Outlet } from "react-router-dom";
 import './chatList.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const ChatList = ({ currentTheme }) => {
 
@@ -29,6 +30,15 @@ const ChatList = ({ currentTheme }) => {
             name: 'User 5'
         },
     ]);
+
+    const chatId = useParams().chatId;
+    const navigate = useNavigate();
+    console.log('render')
+    useEffect(() => {
+        if (!chatList.find(el => el.id == chatId)) {
+            return navigate("/chats");
+        }
+    }, [chatId, chatList]);
 
     const deleteChat = (id) => {
         setChatList((chatList) => [...chatList.filter(el => el.id !== id)]);
