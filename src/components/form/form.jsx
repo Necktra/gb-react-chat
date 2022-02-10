@@ -1,9 +1,9 @@
 import { Button, TextField } from '@mui/material';
 import { useRef, useState, useEffect } from 'react';
 import { AUTHORS } from '../../utils/constants';
+import './form.scss';
 
-
-const Form = ({ sendMessage }) => {
+const Form = ({ sendMessage, chatId }) => {
 
   const [newMessageText, setNewMessageText] = useState('');
 
@@ -13,14 +13,14 @@ const Form = ({ sendMessage }) => {
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
-    sendMessage(AUTHORS.AUTHOR_ME, newMessageText);
+    //console.log(AUTHORS.AUTHOR_ME, newMessageText, chatId);
+    sendMessage(AUTHORS.AUTHOR_ME, newMessageText, chatId);
     setNewMessageText("");
   };
 
   return (
 
-    <form className="app-form" onSubmit={onHandleSubmit}>
-
+    <form className="form-wrapper" onSubmit={onHandleSubmit}>
       <TextField
         fullWidth
         inputRef={messageInput}
