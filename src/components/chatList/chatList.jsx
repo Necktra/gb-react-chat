@@ -33,7 +33,7 @@ const ChatList = ({ currentTheme }) => {
 
     const chatId = useParams().chatId;
     const navigate = useNavigate();
-    console.log('render')
+
     useEffect(() => {
         if (!chatList.find(el => el.id == chatId)) {
             return navigate("/chats");
