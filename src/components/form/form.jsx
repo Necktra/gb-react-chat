@@ -13,7 +13,6 @@ const Form = ({ sendMessage, chatId }) => {
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
-    //console.log(AUTHORS.AUTHOR_ME, newMessageText, chatId);
     sendMessage(AUTHORS.AUTHOR_ME, newMessageText, chatId);
     setNewMessageText("");
   };

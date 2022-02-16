@@ -1,28 +1,28 @@
 import './chat.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AUTHORS } from '../../utils/constants';
 import MessageList from '../messegeList/messageList';
 import Form from '../form/form';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getMessagesById } from './../../store/messages/selector';
+import { useDispatch } from 'react-redux';
+import { sendNewMessage } from '../../store/messages/actions';
 
 const Chat = () => {
 
     const chatId = useParams().chatId;
-    const [messageList, setMessageList] = useState({});
+    const dispatch = useDispatch();
+    const getMessagesList = useMemo(() => getMessagesById(chatId), [chatId]);
+    const messageList = useSelector(getMessagesList);
 
     const sendMessage = (author, text, chat) => {
-        setMessageList(messageList => {
-            if (messageList[chat]) {
-                return { ...messageList, [chat]: [...messageList[chat], { id: uuidv4(), author: author, text: text }] }
-            } else {
-                setMessageList(messageList => ({ ...messageList, [chat]: [{ id: uuidv4(), author: author, text: text }] }));
-            }
-        });
+        dispatch(sendNewMessage(chat, uuidv4(), author, text));
     };
 
     useEffect(() => {
-        if (messageList?.[chatId]?.[messageList[chatId].length - 1]?.author === AUTHORS.AUTHOR_ME) {
+        if (messageList?.[messageList.length - 1]?.author === AUTHORS.AUTHOR_ME) {
             const botAnswerInterval = setTimeout(() => sendMessage(AUTHORS.AUTHOR_BOT, 'Message from Bot', chatId), 1500);
             return () => clearTimeout(botAnswerInterval);
         }
@@ -30,7 +30,7 @@ const Chat = () => {
 
     return (
         <div className='chat-messages-wrapper'>
-            {messageList[chatId] && <MessageList messageList={messageList[chatId]} />}
+            {messageList && <MessageList messageList={messageList} />}
             <Form sendMessage={sendMessage} chatId={chatId} />
         </div>
     );
