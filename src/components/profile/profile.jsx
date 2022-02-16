@@ -1,10 +1,12 @@
 import { Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowName } from './../../store/profile/actions';
+import { getShowName, getUserName } from './../../store/profile/selector';
 
 const Profile = ( props ) => {
-    const name = useSelector(state => state.name);
-    const showName = useSelector(state => state.showName);
+    const name = useSelector(getUserName);
+    const showName = useSelector(getShowName);
+
     const dispatch = useDispatch();
 
     return (

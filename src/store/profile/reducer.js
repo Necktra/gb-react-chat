@@ -1,4 +1,3 @@
-
 import { TOGGLE_SHOW_NAME } from './actions';
 
 const initialState = {
