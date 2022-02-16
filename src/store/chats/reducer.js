@@ -13,7 +13,7 @@ function chatsReducer(state = initialState, action) {
         name: action.payload.name
       }];
     case DELETE_CHAT:
-      return [...state.filter(el => el.id !== action.payload.id)];
+      return state.filter(el => el.id !== action.payload.id);
     default:
       return state;
   }
