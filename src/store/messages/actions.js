@@ -15,7 +15,7 @@ export const sendNewMessage = (chatId, messageId, author, text) => ({
 
 let botAnswerInterval;
 
-export const sendNewMessageThunk = (chatId, messageId, author, text) => async (dispatch, getState) => {
+export const sendNewMessageThunk = (chatId, messageId, author, text) => (dispatch, getState) => {
     dispatch(sendNewMessage(chatId, messageId, author, text));
     clearTimeout(botAnswerInterval);
     if (author === AUTHORS.AUTHOR_ME){
