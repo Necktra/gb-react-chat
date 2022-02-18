@@ -1,7 +1,5 @@
 import './router.scss';
 import { useState } from 'react';
-import ChatList from '../chatList/chatList';
-
 import { ThemeProvider } from '@emotion/react';
 import { lightTheme } from '../../themes/themes';
 import Chat from '../chat/chat';
@@ -9,6 +7,7 @@ import { Route, Routes, BrowserRouter, NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { darkTheme } from './../../themes/themes';
 import Profile from './../profile/profile';
+import ChatListContainer from '../chatList/chatListContainer';
 
 const Router = () => {
 
@@ -38,7 +37,7 @@ const Router = () => {
 
                     <Routes>
                         <Route path="/" element={<div>Home</div>} />
-                        <Route path="/chats" element={<ChatList currentTheme={currentTheme}/>} >
+                        <Route path="/chats" element={<ChatListContainer currentTheme={currentTheme}/>} >
                             <Route path=":chatId" element={<Chat />} />
                         </Route>
                         <Route path="/profile" element={<Profile />} />
