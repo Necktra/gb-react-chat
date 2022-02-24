@@ -1,0 +1,18 @@
+.singles {
+  text-align: center;
+
+  &-list {
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &__item {
+      width: 223px;
+      height: 310px;
+      margin: 10px;
+    }
+
+  }
+}
