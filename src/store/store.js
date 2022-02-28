@@ -11,6 +11,7 @@ import profileReducer from './profile/reducer';
 import storage from 'redux-persist/lib/storage';
 import persistReducer from 'redux-persist/es/persistReducer';
 import persistStore from 'redux-persist/es/persistStore';
+import singlesReducer from './singles/reducer';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     chats: chatsReducer,
     profile: profileReducer,
     messages: messagesReducer,
+    singles: singlesReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 import { darkTheme } from './../../themes/themes';
 import Profile from './../profile/profile';
 import ChatListContainer from '../chatList/chatListContainer';
+import SinglesContainer from './../singles/singlesContainer';
 
 const Router = () => {
 
@@ -31,6 +32,10 @@ const Router = () => {
                             Chats
                         </NavLink>
 
+                        <NavLink to="/singles" style={({ isActive }) => ({ color: isActive ? currentTheme.palette.primary.main : "black" })}>
+                            Singles
+                        </NavLink>
+
                         <Button style={{ width: '60px', height: '60px' }} className='chat-change-theme' variant='outlined' size='small' onClick={() => setCurrentTheme(currentTheme === lightTheme ? darkTheme : lightTheme)}>Change theme</Button>
                     </nav>
 
@@ -41,6 +46,7 @@ const Router = () => {
                             <Route path=":chatId" element={<Chat />} />
                         </Route>
                         <Route path="/profile" element={<Profile />} />
+                        <Route path="/singles" element={<SinglesContainer />} />
                         <Route path="*" element={<p style={{ 'textAlign': 'center', 'fontWeight': 'bold', 'fontSize': '24px' }}>Page doesn't exist</p>} />
                     </Routes>
 
