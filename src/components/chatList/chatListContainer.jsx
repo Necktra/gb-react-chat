@@ -1,37 +1,85 @@
 import './chatList.scss';
-import { useEffect, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getChatList } from './../../store/chats/selector';
 import { useSelector, useDispatch } from 'react-redux';
-import { shallowEqual } from "react-redux";
-import { addNewChat, deleteChat } from "../../store/chats/actions";
 import ChatList from "./chatList";
+import { initChatsTracking } from './../../store/chats/actions';
+import { set, get } from 'firebase/database';
+import { getChatsRefById, getProfileChatsRef } from '../../services/firebase';
+import { getMessagesRefByChatId, profileRef, auth, getChatsInProfileRef } from './../../services/firebase';
+import { remove } from '@firebase/database';
+import { CircularProgress } from '@mui/material';
 
 const ChatListContainer = ({ currentTheme }) => {
 
-    const chatList = useSelector(getChatList, shallowEqual);
-    const dispatch = useDispatch();
+    const chatList = useSelector(getChatList);
 
+    const [currentUserChatList, setCurrentUserChatList] = useState(chatList);
+    const [showLoader, setShowLoader] = useState(true);
+
+    useEffect(() => {
+        get(getChatsInProfileRef(auth.currentUser.uid)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setCurrentUserChatList(chatList.filter((el) => snapshot.val()[el.id]));
+                setShowLoader(false);
+            } else {
+                setCurrentUserChatList([]);
+                setShowLoader(false);
+                console.log("No data available");
+            }
+        })
+    }, [chatList]);
+
+    const dispatch = useDispatch();
     const chatId = useParams().chatId;
     const navigate = useNavigate();
 
+    const [newChatUser, setNewChatUser] = useState("");
+    const [newChatUserId, setNewChatUserId] = useState("");
+    const [usersData, setUsersData] = useState("");
+
+    const setNewChatUserHandler = (selectedUserName) => {
+        setNewChatUser(selectedUserName);
+    };
+
     useEffect(() => {
-        if (!chatList.find(el => el.id == chatId)) {
+        get(profileRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                setUsersData(snapshot.val());
+            } else {
+                console.log("No data available");
+            }
+        })
+    }, []);
+
+    useEffect(() => {
+        if (!currentUserChatList.find(el => el.id == chatId)) {
             return navigate("/chats");
         }
-    }, [chatId, chatList]);
+    }, [chatId, currentUserChatList]);
+
+    useEffect(() => {
+        dispatch(initChatsTracking());
+    }, []);
 
     const deleteChatHandler = useCallback((id) => {
-        dispatch(deleteChat(id));
+        debugger
+        remove(getChatsRefById(id));
+        remove(getMessagesRefByChatId(id));
     }, [dispatch]);
 
-    const addChat = useCallback(() => {
-        dispatch(addNewChat(uuidv4(), 'New user'));
-    }, [dispatch]);
+    const addChat = () => {
+        const newId = `chat-${Date.now()}`;
+        set(getMessagesRefByChatId(newId), { empty: true });
+        set(getChatsRefById(newId), { 'id': newId, 'name': newChatUser.name });
+        set(getProfileChatsRef(auth.currentUser.uid, newId), newId);
+        set(getProfileChatsRef(newChatUserId, newId), newId);
+        setNewChatUser("");
+    };
 
-    return (
-        <ChatList chatList={chatList} chatId={chatId} currentTheme={currentTheme} deleteChatHandler={deleteChatHandler} addChat={addChat}/>
+    return (showLoader ? <CircularProgress /> :
+        <ChatList setNewChatUserId={setNewChatUserId} usersData={usersData} newChatUser={newChatUser} setNewChatUserHandler={setNewChatUserHandler} chatList={currentUserChatList} chatId={chatId} currentTheme={currentTheme} deleteChatHandler={deleteChatHandler} addChat={addChat} />
     )
 }
 

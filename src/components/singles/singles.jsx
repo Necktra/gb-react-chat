@@ -17,9 +17,7 @@ const Singles = ({ singlesList, singlesLoading, singlesError, getSingles }) => {
     return (
         <div className="singles">
             <h2>Magic: The Gathering singles</h2>
-
             {singlesLoading === 1 ? <CircularProgress /> : <Button style={{ width: '130px', height: '30px' }} onClick={getSingles}>Refresh singles list</Button>}
-
             {singlesError ? <div>Error! Try again later</div> : <List className="singles-list">
                 {singlesListRender}
             </List>}

@@ -20,10 +20,6 @@ export const darkTheme = createTheme({
       ...{
         primary: purple,
         divider: purple[700],
-        background: {
-          default: purple[900],
-          paper: purple[900],
-        },
         text: {
           secondary: grey[500],
         },

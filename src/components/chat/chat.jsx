@@ -1,5 +1,5 @@
 import './chat.scss';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import MessageList from '../messegeList/messageList';
 import Form from '../form/form';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,7 +7,9 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getMessagesById } from './../../store/messages/selector';
 import { useDispatch } from 'react-redux';
-import { sendNewMessageThunk } from '../../store/messages/actions';
+import { initMessageTracking } from '../../store/messages/actions';
+import { getMessageRefById } from './../../services/firebase';
+import { set } from 'firebase/database';
 
 const Chat = () => {
 
@@ -16,9 +18,19 @@ const Chat = () => {
     const getMessagesList = useMemo(() => getMessagesById(chatId), [chatId]);
     const messageList = useSelector(getMessagesList);
 
-    const sendMessage = (author, text, chat) => {
-        dispatch(sendNewMessageThunk(chat, uuidv4(), author, text));
+    const sendMessage = (author, name, text) => {
+        const messageId = uuidv4();
+        set(getMessageRefById(chatId, messageId), {
+            messageId,
+            name,
+            author,
+            text,
+          });
     };
+
+    useEffect(() => {
+        dispatch(initMessageTracking(chatId));
+    }, [chatId]);
 
     return (
         <div className='chat-messages-wrapper'>
