@@ -1,24 +1,25 @@
-import { AUTHORS } from "../../utils/constants";
-import { v4 as uuidv4 } from 'uuid';
+import {
+    getMessageListRefByChatId
+} from './../../services/firebase';
+import {
+    onChildAdded
+} from '@firebase/database';
 
 export const SEND_NEW_MESSAGE = 'MESSAGES::SEND_NEW_MESSAGE';
 
-export const sendNewMessage = (chatId, messageId, author, text) => ({
+export const sendNewMessage = (chatId, messageId, author, name, text) => ({
     type: SEND_NEW_MESSAGE,
     payload: {
         chatId,
         messageId,
         author,
+        name,
         text,
     }
 });
 
-let botAnswerInterval;
-
-export const sendNewMessageThunk = (chatId, messageId, author, text) => (dispatch, getState) => {
-    dispatch(sendNewMessage(chatId, messageId, author, text));
-    clearTimeout(botAnswerInterval);
-    if (author === AUTHORS.AUTHOR_ME){
-        botAnswerInterval = setTimeout(() => dispatch(sendNewMessage(chatId, uuidv4(), AUTHORS.AUTHOR_BOT, 'Message from Bot')), 1500);
-    }
+export const initMessageTracking = (chatId) => async (dispatch) => {
+    await onChildAdded(getMessageListRefByChatId(chatId), (snapshot) => {
+        dispatch(sendNewMessage(chatId, snapshot.val().messageId, snapshot.val().author, snapshot.val().name, snapshot.val().text));
+    });
 };
