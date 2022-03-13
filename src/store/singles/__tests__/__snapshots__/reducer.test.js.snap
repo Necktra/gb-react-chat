@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Singles reducer tests returns correct state after GET_SINGLES_FAILURE action 1`] = `
+Object {
+  "error": undefined,
+  "request": 3,
+}
+`;
+
+exports[`Singles reducer tests returns correct state after GET_SINGLES_REQUEST action 1`] = `
+Object {
+  "error": null,
+  "request": 1,
+}
+`;
+
+exports[`Singles reducer tests returns correct state after GET_SINGLES_SUCCESS action 1`] = `
+Object {
+  "request": 2,
+  "singles": undefined,
+}
+`;

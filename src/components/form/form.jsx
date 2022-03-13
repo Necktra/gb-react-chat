@@ -1,17 +1,17 @@
 import { Button, TextField } from '@mui/material';
 import { useRef, useState, useEffect } from 'react';
 import './form.scss';
-import { auth, getProfileNameRef } from './../../services/firebase';
+import { getProfileNameRef } from './../../services/firebase';
 import { get } from 'firebase/database';
 
-const Form = ({ sendMessage, chatId }) => {
+const Form = ({ sendMessage, chatId, userUid }) => {
 
   const [newMessageText, setNewMessageText] = useState('');
   const messageInput = useRef(null);
   const [name, setName] = useState("");
 
   useEffect(() => {
-    get(getProfileNameRef(auth.currentUser.uid)).then((snapshot) => {
+    get(getProfileNameRef(userUid)).then((snapshot) => {
       setName(snapshot.val());
     });
   }, []);
@@ -20,7 +20,7 @@ const Form = ({ sendMessage, chatId }) => {
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
-    sendMessage(auth.currentUser.uid, name, newMessageText, chatId);
+    sendMessage(userUid, name, newMessageText, chatId);
     setNewMessageText("");
   };
 
