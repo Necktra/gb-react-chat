@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { getMessagesById } from './../../store/messages/selector';
 import { useDispatch } from 'react-redux';
 import { initMessageTracking } from '../../store/messages/actions';
-import { getMessageRefById } from './../../services/firebase';
+import { auth, getMessageRefById } from './../../services/firebase';
 import { set } from 'firebase/database';
 
 const Chat = () => {
@@ -17,6 +17,7 @@ const Chat = () => {
     const dispatch = useDispatch();
     const getMessagesList = useMemo(() => getMessagesById(chatId), [chatId]);
     const messageList = useSelector(getMessagesList);
+    const userUid = auth.currentUser.uid;
 
     const sendMessage = (author, name, text) => {
         const messageId = uuidv4();
@@ -35,7 +36,7 @@ const Chat = () => {
     return (
         <div className='chat-messages-wrapper'>
             {messageList && <MessageList messageList={messageList} />}
-            <Form sendMessage={sendMessage} chatId={chatId} />
+            <Form userUid={userUid} sendMessage={sendMessage} chatId={chatId} />
         </div>
     );
 }

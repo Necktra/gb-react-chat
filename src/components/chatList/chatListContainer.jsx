@@ -64,7 +64,6 @@ const ChatListContainer = ({ currentTheme }) => {
     }, []);
 
     const deleteChatHandler = useCallback((id) => {
-        debugger
         remove(getChatsRefById(id));
         remove(getMessagesRefByChatId(id));
     }, [dispatch]);

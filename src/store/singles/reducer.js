@@ -22,12 +22,12 @@ function singlesReducer(state = initialState, action) {
       };
     case GET_SINGLES_SUCCESS:
       return {
-        ...state, singles: action.payload.data,
+        ...state, singles: action.payload.data.cards,
         request: FETCH_STATUSES.SUCCESS
       };
     case GET_SINGLES_FAILURE:
       return {
-        ...state, error: action.payload,
+        ...state, error: action.payload.message,
         request: FETCH_STATUSES.FAILURE
       };
     default:

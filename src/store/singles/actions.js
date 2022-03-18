@@ -22,18 +22,18 @@ export const getSinglesFailure = (err) => ({
     payload: err,
 });
 
-export const getSinglesThunk = () => (dispatch, getState) => {
-    dispatch(getSinglesRequest())
-    fetch(BASE_MTG_API_URL + "/cards?pageSize=12")
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`Request failed with status ${res.status}`)
-            }
-            return res.json();
-        })
-        .then(data => {
-            dispatch(getSinglesSuccess(data.cards))
-        }).catch((err) => {
-            dispatch(getSinglesFailure(err.message))
-        });
+export const getSinglesThunk = () => async (dispatch, getState) => {
+    dispatch(getSinglesRequest());
+
+    try {
+        const response = await fetch(BASE_MTG_API_URL + "/cards?pageSize=12");
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+        const result = await response.json();
+        dispatch(getSinglesSuccess(result));
+    } catch (err) {
+        dispatch(getSinglesFailure(err));
+        console.warn(err.message);
+    }
 };
